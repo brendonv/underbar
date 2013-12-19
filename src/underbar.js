@@ -15,10 +15,10 @@ var _ = { };
 
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
-  _.first = function(array, n) {
+  _.first = function(array, n) { 
     var arr = [];
     if (n === undefined) {
-      return array[0];
+      return arr.push(array[0]);
     }else{
       if (n > array.length) n = array.length;
       for (var i=0; i < n; i++) {
@@ -32,15 +32,17 @@ var _ = { };
   // last element.
   _.last = function(array, n) {
     var arr = [];
-    len = array.length;
-    if (n === undefined || n === 0) {
-      return array[len];
+    var len = array.length-1;
+    if (n === undefined) {
+      return arr[0] = array[len];
+    }else if (n === 0) {
+      return arr;
     }else {
-      for (var i=n; i>=0; i--) {
+      if (n > len) n = len+1;
+      for (var i=len; i>=len+1-n; i--) {
         arr.unshift(array[i]);
       }
-    }
-    return arr; 
+      return arr; 
     }
   };
 
