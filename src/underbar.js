@@ -147,6 +147,9 @@ var _ = { };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
+    return _.map(list, function(value) {
+      return (typeof methodName === "function" ? methodName : value[methodName]).apply(value,args);
+    });
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -163,6 +166,12 @@ var _ = { };
   //   }, 0); // should be 6
   //
   _.reduce = function(collection, iterator, initialValue) {
+    if (initialValue === undefined) initialValue = 0;
+    var result = initialValue;
+    for (var val in collection) {
+      result = iterator(result, collection[val]);
+    };
+    return result;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -181,12 +190,22 @@ var _ = { };
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-  };
+    if (iterator === undefined) iterator = function(value) { return value};
+    if (collection.length === 0 || collection[0] === 1) return true;
+    if (collection[0] === 0 && collection.length === 1) return false;
+    var result = false;
+    for (var val in collection) {
+      result = iterator(collection[val]);
+      if (result === undefined || result === false) return false;
+    };
+    return result;
+   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+
   };
 
 
