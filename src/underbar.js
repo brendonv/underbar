@@ -206,8 +206,6 @@ var _ = { };
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
     var result = false;
-    console.log(arguments.length);
-    console.log(arguments);
     if(arguments.length === 1){
       _.each(collection, function(value) {if(value) return result=true;});
     } else {
@@ -238,11 +236,25 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var arr = Object.keys(obj);
+    for (var i=1; i<Object.keys(arguments).length;i++) {
+      for(var key in arguments[i]) {
+        obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (var i=1; i<Object.keys(arguments).length;i++) {
+      for(var key in arguments[i]) {
+      var arr = Object.keys(obj);
+        if(!_.contains(arr, key)) obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
 
@@ -283,6 +295,9 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    return function() {
+      return func.apply(this,arguments);
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -292,6 +307,7 @@ var _ = { };
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    window.setTimeout(func, wait, arguments[2],arguments[3]);
   };
 
 
@@ -302,6 +318,15 @@ var _ = { };
 
   // Shuffle an array.
   _.shuffle = function(array) {
+    var shuffled = _.uniq(array); //assigning shuffled directly to array still mutates array. Used uniq as ahack to return a new duplicate array
+    console.log(array);
+    var j;
+    var len = array.length;
+    for (var i=len-1; i>1;i--) { //modern Fisher-Yates shuffle
+      j = Math.floor(Math.random()*(i));
+      shuffled[i] = shuffled.splice(j,1,shuffled[i])[0];
+    }
+    return shuffled;
   };
 
 
