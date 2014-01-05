@@ -95,22 +95,31 @@ var _ = { };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var result = array;
     var arr =[];
-    for (var j=1; j<result.length; j++) {
-      var key = result[j];
-      var i = j-1;
-      while (i>=0 && (result[i] > key) ) {
-        result[i+1] = result[i];
-        i = i-1;
-      } 
-      result[i+1] = key;
+    // var result = array;
+    // for (var j=1; j<result.length; j++) {
+    //   var key = result[j];
+    //   var i = j-1;
+    //   while (i>=0 && (result[i] > key) ) {
+    //     result[i+1] = result[i];
+    //     i = i-1;
+    //   } 
+    //   result[i+1] = key;
+    // }
+    // for ( var i=0; i<result.length; i++) {
+    //   if ( result[i] !== result[i+1]) {
+    //     arr.push(result[i]);
+    //   }
+    // }
+    if (arguments[1] === true) {
+      _.each(array, function(value,index) {
+        if(value === array[index+1]) array.splice(index+1,1);
+      });
+      return array;
     }
-    for ( var i=0; i<result.length; i++) {
-      if ( result[i] !== result[i+1]) {
-        arr.push(result[i]);
-      }
-    }
+    _.each(array, function(value, index) {
+      if(!_.contains(arr,value)) arr.push(value);
+    });
     return arr;
   };
 
